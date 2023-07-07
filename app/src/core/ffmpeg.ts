@@ -8,7 +8,7 @@ import { player } from './player';
 import { WebVtt } from '@audapolis/webvtt-writer';
 
 const { FFmpegCommand, FFmpegInput, FFmpegOutput, FilterNode, FilterChain } = Fessonia({
-  ffmpeg_bin: ffmpegPath,
+  ffmpeg_bin: ffmpegPath.replace('app.asar', 'app.asar.unpacked'),
 });
 
 export function getSubtitleCodec(outputPath: string): string {
@@ -166,7 +166,7 @@ async function runFfmpegWithProgress(
   cmd: Fessonia.FFmpegCommand,
   onTimeProgress: ProgressCallback
 ) {
-  console.debug('ffmpeg commandline: ', getFfmpegComandLine(cmd));
+  console.debug('ffmpeg commandline: ', cmd.toString());
   cmd.on('update', (data: { out_time_ms: number }) => {
     onTimeProgress(data.out_time_ms / 1000);
   });
@@ -270,6 +270,7 @@ export async function convertToWav(
     cmd.on('success', resolve);
     cmd.on('error', reject);
   });
+  console.log('running ffmpeg', cmd.toString());
   cmd.spawn(true);
   console.log('ffmpeg result', await promise);
 
@@ -290,17 +291,6 @@ export async function copyToMp4(input_path: string): Promise<Buffer> {
   const fileData = fs.readFileSync(outputFile);
   fs.rmdirSync(tempdir, { recursive: true });
   return fileData;
-}
-
-function getFfmpegComandLine(cmd: Fessonia.FFmpegCommand) {
-  return (
-    cmd.toCommand().command +
-    ' ' +
-    cmd
-      .toCommand()
-      .args.map((x) => `'${x}'`)
-      .join(' ')
-  );
 }
 
 function getTempDir(): Promise<string> {

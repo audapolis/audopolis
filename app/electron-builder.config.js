@@ -10,7 +10,7 @@ const config = {
     output: 'dist',
     buildResources: './assets/',
   },
-  files: ['build/**'],
+  files: ['build/**', './server/**', './generated/**'],
   extraMetadata: {
     version: getVersion(),
   },
@@ -44,8 +44,9 @@ const config = {
     category: 'Audio',
     artifactName: `\${name}-linux-\${arch}-${getGithubSafeVersion()}.\${ext}`,
   },
-  extraResources: ['./server/**', './generated/**'],
-  asar: false,
+  // extraResources: ['./server/**', './generated/**'],
+  asar: true,
+  asarUnpack: ['node_modules/ffmpeg-static/**'],
 };
 
 module.exports = config;
