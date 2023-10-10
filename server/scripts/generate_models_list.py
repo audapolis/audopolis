@@ -20,14 +20,16 @@ current_lang = None
 for row in rows:
     if strong := row.find("strong"):
         current_lang = strong.text
+        print(current_lang)
     else:
         assert (
             current_lang is not None
         ), "no previous language heading found, probably the format changed :("
         raw = {k: v for k, v in zip(columns, row.find_all("td"))}
 
-        if current_lang == "English Other" or "not" in raw["Notes"].text.lower():
+        if current_lang == "English Other" or "not recommended" in raw["Notes"].text.lower():
             continue
+
 
         if current_lang == "Speaker identification model":
             continue
