@@ -20,6 +20,13 @@ English:
   size: 128M
   type: transcription
   compressed: true
+- name: big-2
+  url: https://alphacephei.com/vosk/models/vosk-model-en-us-0.42-gigaspeech.zip
+  description: Accurate generic US English model trained by Kaldi on <a href="http://kaldi-asr.org/models/m14">Gigaspeech</a>.
+    Mostly for podcasts, not for telephony
+  size: 2.3G
+  type: transcription
+  compressed: true
 Indian English:
 - name: big
   url: https://alphacephei.com/vosk/models/vosk-model-en-in-0.5.zip
@@ -154,6 +161,14 @@ Portuguese/Brazilian Portuguese:
   size: 1.6G
   type: transcription
   compressed: true
+Greek:
+- name: big
+  url: https://alphacephei.com/vosk/models/vosk-model-el-gr-0.7.zip
+  description: Big narrowband Greek model for server processing, not extremely accurate
+    though
+  size: 1.1G
+  type: transcription
+  compressed: true
 Turkish:
 - name: small
   url: https://alphacephei.com/vosk/models/vosk-model-small-tr-0.3.zip
@@ -233,6 +248,13 @@ Farsi:
   url: https://alphacephei.com/vosk/models/vosk-model-small-fa-0.4.zip
   description: Lightweight wideband model for Android and RPi for Farsi (Persian)
   size: 47M
+  type: transcription
+  compressed: true
+- name: big
+  url: https://alphacephei.com/vosk/models/vosk-model-fa-0.5.zip
+  description: Model with large vocabulary, not yet accurate but better than before
+    (Persian)
+  size: 1G
   type: transcription
   compressed: true
 - name: small-2
