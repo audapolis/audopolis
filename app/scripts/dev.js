@@ -1,14 +1,13 @@
-const { createServer, build, createLogger } = require('vite');
+const { createServer, build } = require('vite');
 const electronPath = require('electron');
 const { spawn } = require('child_process');
 const mode = (process.env.MODE = process.env.MODE || 'development');
-const LOG_LEVEL = 'warn';
 const sharedConfig = {
   mode,
   build: {
     watch: {},
   },
-  logLevel: LOG_LEVEL,
+  logLevel: 'warn',
 };
 
 const getWatcher = ({ name, configFile, writeBundle }) => {
@@ -29,10 +28,6 @@ const setupMainPackageWatcher = (viteDevServer) => {
     process.env.VITE_DEV_SERVER_URL = `${protocol}//${host}:${port}${path}`;
   }
 
-  const logger = createLogger(LOG_LEVEL, {
-    prefix: '[main]',
-  });
-
   let spawnProcess = null;
 
   return getWatcher({
@@ -44,18 +39,10 @@ const setupMainPackageWatcher = (viteDevServer) => {
         spawnProcess = null;
       }
 
-      spawnProcess = spawn(String(electronPath), [
-        `${dir}/start.cjs.js`,
-        `--remote-debugging-port=${process.env.DEBUGGER_PORT}`,
-      ]);
-
-      spawnProcess.stdout.on(
-        'data',
-        (d) => d.toString().trim() && logger.warn(d.toString(), { timestamp: true })
-      );
-      spawnProcess.stderr.on(
-        'data',
-        (d) => d.toString().trim() && logger.error(d.toString(), { timestamp: true })
+      spawnProcess = spawn(
+        String(electronPath),
+        [`${dir}/start.cjs.js`, `--remote-debugging-port=${process.env.DEBUGGER_PORT}`],
+        { stdio: 'inherit' }
       );
     },
   });

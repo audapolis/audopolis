@@ -24,6 +24,14 @@ export const createWindow = (): void => {
     show: false,
   });
 
+  let dontSendLog = false;
+  window.webContents.on('console-message', (_e, level, message) => {
+    if (message == 'server stderr') dontSendLog = true;
+    logLine && !dontSendLog && logLine(LogSource.RendererProcess, NumericLogLevels[level], message);
+
+    if (message == 'console.groupEnd') dontSendLog = false;
+  });
+
   window.webContents.on('new-window', (event, url, frameName, disposition, options) => {
     if (frameName === 'modal') {
       event.preventDefault();
@@ -151,4 +159,4 @@ import './server';
 import { windowList } from './windowList';
 import { applyMenuBar, setMenuBar } from './menu';
 import { isRunningInTest } from '../src/util';
-import { initMainProcessLog } from '../src/util/log';
+import { LogSource, NumericLogLevels, initMainProcessLog, logLine } from '../src/util/log';

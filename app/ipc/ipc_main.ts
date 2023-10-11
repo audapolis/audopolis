@@ -6,7 +6,7 @@ import { setMenuBar, showMenuBar, showContextMenu } from '../main_process/menu';
 import { sendAll } from '../main_process/windowList';
 import { serverInfo } from '../main_process/server';
 import { ServerInfo } from '../main_process/types';
-import { logLine, logFilePath, LogLevel, LogSource } from '../src/util/log';
+import { logFilePath } from '../src/util/log';
 
 ipcMain.handle('open-file', (event, options) => {
   const win = BrowserWindow.fromWebContents(event.sender);
@@ -103,9 +103,4 @@ export function exportDebugLog(window: BrowserWindow): void {
 
 ipcMain.handle('get-home-path', () => {
   return app.getPath('home');
-});
-
-ipcMain.handle('log-line', (_event, source: LogSource, level: LogLevel, ...args: any[]) => {
-  assertSome(logLine);
-  logLine(source, level, ...args.map((x) => JSON.stringify(x)));
 });

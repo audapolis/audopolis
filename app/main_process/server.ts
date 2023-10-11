@@ -6,6 +6,7 @@ import { app, dialog } from 'electron';
 import { publishServerInfo, publishServerStderr } from '../ipc/ipc_main';
 import { ServerInfo } from './types';
 import { isRunningInTest } from '../src/util';
+import { LogLevel, LogSource, logLine } from '../src/util/log';
 
 function findServer() {
   const possibilities = [
@@ -74,7 +75,7 @@ function startServer() {
     return;
   }
   serverProcess.stdout.on('data', (data: Buffer) => {
-    console.log('server-stdout', data.toString());
+    logLine && logLine(LogSource.ServerProcess, LogLevel.Log, data);
     try {
       const parsed_data: ServerStartingMessage | ServerStartedMessage = JSON.parse(data.toString());
       if (parsed_data.msg == 'server_starting') {
@@ -88,7 +89,7 @@ function startServer() {
   });
 
   serverProcess.stderr.on('data', (data: Buffer) => {
-    console.log(`server-stderr: \n${data}`);
+    logLine && logLine(LogSource.ServerProcess, LogLevel.Error, data);
     publishServerStderr(data.toString());
   });
 
