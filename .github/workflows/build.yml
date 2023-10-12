@@ -85,7 +85,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [["ubuntu-latest"], ["self-hosted", "macOS"], ["windows-latest"]]
 
     runs-on: ${{ matrix.os }}
 
@@ -108,7 +108,7 @@ jobs:
       - name: setup python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: 3.11
 
       - name: cache cargo
         uses: actions/cache@v3
